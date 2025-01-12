@@ -10,7 +10,7 @@ const { renderFile } = require("ejs");
 
 const RESEND_API_KEY = settings.api.client.resend.api_key;
 
-const PrismModule = { "name": "User/Password Auth with Email", "api_level": 3, "target_platform": "0.5.0-alpha1" };
+const PrismModule = { "name": "User/Password Auth with Email", "api_level": 3, "target_platform": "0.5.0" };
 
 if (PrismModule.target_platform !== settings.version) {
   console.log('Module ' + PrismModule.name + ' does not support this platform release of Prism. The module was built for platform ' + PrismModule.target_platform + ' but is attempting to run on version ' + settings.version + '.')
@@ -92,9 +92,9 @@ module.exports.load = async function (app, db) {
   
   // Registration route
   app.post("/auth/register", rateLimit, async (req, res) => {
-    const { username, email, password, recaptchaResponse } = req.body;
+    const { username, email, password } = req.body;
 
-    if (!username || !email || !password || !recaptchaResponse) {
+    if (!username || !email || !password) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
@@ -119,19 +119,6 @@ module.exports.load = async function (app, db) {
     const existingUsername = await db.get(`username-${username}`);
     if (existingUsername) {
       return res.status(409).json({ error: "Username already taken" });
-    }
-
-    // Verify reCAPTCHA
-    const recaptchaVerification = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `secret=${settings.api.client.recaptcha.secret_key}&response=${recaptchaResponse}`
-    });
-
-    const recaptchaResult = await recaptchaVerification.json();
-
-    if (!recaptchaResult.success) {
-        return res.status(400).json({ error: "reCAPTCHA verification failed" });
     }
 
     // Generate a unique user ID
@@ -275,23 +262,10 @@ module.exports.load = async function (app, db) {
 
   // Password reset request route
   app.post("/auth/reset-password-request", async (req, res) => {
-    const { email, recaptchaResponse } = req.body;
+    const { email } = req.body;
 
-    if (!email || !recaptchaResponse) {
-      return res.status(400).json({ error: "Email and reCAPTCHA response are required" });
-    }
-
-    // Verify reCAPTCHA
-    const recaptchaVerification = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `secret=${settings.api.client.recaptcha.secret_key}&response=${recaptchaResponse}`
-    });
-
-    const recaptchaResult = await recaptchaVerification.json();
-
-    if (!recaptchaResult.success) {
-        return res.status(400).json({ error: "reCAPTCHA verification failed" });
+    if (!email) {
+      return res.status(400).json({ error: "Email is required" });
     }
 
     const user = await db.get(`user-${email}`);
@@ -364,23 +338,10 @@ module.exports.load = async function (app, db) {
 
   // Magic link login request
   app.post("/auth/magic-link", rateLimit, async (req, res) => {
-    const { email, recaptchaResponse } = req.body;
+    const { email } = req.body;
 
-    if (!email || !recaptchaResponse) {
-      return res.status(400).json({ error: "Email and reCAPTCHA response are required" });
-    }
-
-    // Verify reCAPTCHA
-    const recaptchaVerification = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `secret=${settings.api.client.recaptcha.secret_key}&response=${recaptchaResponse}`
-    });
-
-    const recaptchaResult = await recaptchaVerification.json();
-
-    if (!recaptchaResult.success) {
-        return res.status(400).json({ error: "reCAPTCHA verification failed" });
+    if (!email) {
+      return res.status(400).json({ error: "Email is required" });
     }
 
     const user = await db.get(`user-${email}`);

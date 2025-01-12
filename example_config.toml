@@ -8,13 +8,14 @@
 # General Configuration
 # ---------------------------------
 name = "Prism" # Website/dashboard name
+auto_update = false # Automatically update Prism on boot
 
 # ---------------------------------
 # Heliactyl Release Information
 # ---------------------------------
 platform_codename = "Adelante"
-platform_level = 120 # channel: stable - 06-01-2025 (Adelante R)
-version = "0.5.0-alpha1"
+platform_level = 130 # channel: stable - 10-01-2025 (Adelante R)
+version = "0.5.0"
 
 # ---------------------------------
 # Additional Settings
@@ -52,14 +53,6 @@ accountSwitcher = true
   api_key = "re_xxxxxxxx_xxxxxxxxxxxxxxxxxxxxxxxx"
   from = "noreply@example.com"
   app_name = "Prism"
-
-  [api.client.recaptcha]
-  # ---------------------------------
-  # reCAPTCHA API Key
-  # ---------------------------------
-  enabled = true
-  site_key = "your_recaptcha_site_key"
-  secret_key = "your_recaptcha_secret_key"
 
   [api.client.api] # Prism API version 5
   enabled = true

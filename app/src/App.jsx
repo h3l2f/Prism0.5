@@ -28,11 +28,14 @@ import NotFound from './pages/NotFound';
 import AFKPage from './pages/coins/AFKPage';
 import Store from './pages/coins/Store';
 import ReferralsPage from './pages/Referrals';
+import Tickets from './pages/SupportTickets';
 import AccountPage from './pages/Account';
 
 import AdminOverview from './pages/admin/Overview';
+import AdminTickets from './pages/admin/Tickets';
 import Users from './pages/admin/Users';
 import Nodes from './pages/admin/Nodes';
+import Radar from './pages/admin/Radar';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -113,9 +116,9 @@ class ErrorBoundary extends React.Component {
                   </AccordionTrigger>
                   <AccordionContent>
                     <div className="space-y-2 text-sm text-muted-foreground">
-                      <p>Version: Prism 0.5.0-alpha1</p>
+                      <p>Version: Prism 0.5.0</p>
                       <p>Codename: Adelante</p>
-                      <p>Platform: 120</p>
+                      <p>Platform: 130</p>
                       <p>User Agent: {navigator.userAgent}</p>
                       <p>Timestamp: {new Date().toISOString()}</p>
                     </div>
@@ -216,12 +219,15 @@ export default function App() {
             <Route path="/coins/afk" element={<AFKPage />} />
             <Route path="/coins/store" element={<Store />} />
             <Route path="/referrals" element={<ReferralsPage />} />
+            <Route path="/tickets" element={<Tickets />} />
             <Route path="/account" element={<AccountPage />} />
 
             {/* Admin routes */}
             <Route path="/admin/overview" element={<AdminOverview />} />
             <Route path="/admin/users" element={<Users />} />
             <Route path="/admin/nodes" element={<Nodes />} />
+            <Route path="/admin/radar" element={<Radar />} />
+            <Route path="/admin/tickets" element={<AdminTickets />} />
           </Route>
 
           {/* Auth route */}
